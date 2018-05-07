@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="MobileOptimized" content="320">
+  <meta name="description" content="">
+
+
+  <title>Film-library</title>
+
+  <!--[if IE]>
+  <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="css/check.css">
+  <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+
+
+<!-- HEADER -->
+<header class="header text-white">
+
+  <div class="container relative-block">
+
+    <div class="header__logo-wrap">
+      <a href="#" class="header__logo text-white">
+        <span>Films libray</span>
+      </a>
+    </div>
+    <div class="header__add-wrap">
+
+      <span><a class="icon-plus header__add js-form-open">Add new film</a></span>
+    </div>
+  </div>
+</header><!-- HEADER [END] -->
+		
+
+
+
+<main class="content">
+  <div class="edit">
+    <div class="container white-back">
+      <div class="row">
+        <div class="form-block col-md-6">
+          <form id="movie" action="">
+            <label>
+              <span>title</span>
+              <input type="text" name="title">
+            </label>
+            <label>
+              <span>year</span>
+              <input type="text" name="year">
+            </label>
+            <label>
+              <span>country</span>
+              <input type="text" name="country">
+            </label>
+            <label>
+              <span>genre</span>
+              <input type="text" name="genre">
+            </label>
+            <label>
+              <span>poster(link)</span>
+              <input type="text" name="poster">
+            </label>
+            <label>
+              <span>actors</span>
+              <input type="text" name="actors">
+            </label>
+            <label>
+              <span>description</span>
+              <textarea name="desc" cols="40" rows="3"></textarea>
+            </label>
+            <div class="form-block__error text-white js-error">
+              <span></span>
+            </div>
+            <div class="form-block__btn-wrap">
+              <a class="btn btn--red text-white js-cancel">Cancel</a>
+            </div>
+            <div class="form-block__btn-wrap">
+              <a class="btn btn--blue text-white js-add-movie">Add</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-obj stat">
+    <div class="container new-obj--bc">
+      <div class="new-obj--blur"></div>
+      <div class="row">
+        <div class="poster col-md-4"><img src="img/leio-mclaren-307277.jpg" alt="">
+        </div>
+        <div class="desc col-md-8 text-white ">
+          <h2>Lorem ipsum dolor.</h2>
+          <div class="desc__txt">Lorem ipsum dolor sit amet,
+            consectetur adipisicing elit. Ab debitis dicta
+            dignissimos dolores id iure laborum perspiciatis
+            Lorem ipsum dolor sit amet,
+            consectetur adipisicing elit. Ab debitis dicta
+            dignissimos dolores id iure laborum perspiciatis
+          </div>
+          <div class="desc__details">
+            <div class="row">
+              <div class="col-4 desc__details--item">COUNTRY</div>
+              <div class="col-8 desc__details--item">1212</div>
+              <div class="col-4 desc__details--item">YEAR</div>
+              <div class="col-8 desc__details--item">1212</div>
+              <div class="col-4 desc__details--item">GENRE</div>
+              <div class="col-8 desc__details--item">1212</div>
+              <div class="col-4 desc__details--item">ACTORS</div>
+              <div class="col-8 desc__details--item">Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Dicta est
+                exercitationem nisi obcaecati rerum velit.
+              </div>
+            </div>
+          </div>
+          <div class="control">
+            <div class="row">
+              <div class="col-3"><a href="" class="btn btn--red js-delete">Delete</a></div>
+              <div class="col-3"><a href="" class="btn btn--blue js-edit">Edit</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container white-back">
+      <div class="comment-line">
+        <a class="js-show-comments"><p class="comment">Comments: <span class="js-comment-counter icon-down-open"></span></p></a>
+      </div>
+      <div class="comment-container">
+
+          <p class="comment-line">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            A animi dolorum explicabo ipsam magni nobis non nostrum,
+            perferendis similique soluta?</p>
+
+      </div>
+      <form>
+        <textarea class="comment--place" name="comment" placeholder="Add your comment" id="" cols="10" rows="1"></textarea>
+        <div class="form-block__btn-wrap">
+          <a class="btn btn--blue text-white js-add-comment">Add</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main><!-- MAIN CONTENT [END] -->
+
+
+
+	<!-- FOOTER -->
+	<footer class="footer">
+		<div class="container">
+
+		</div>
+	</footer><!-- FOOTER END -->
+	<div id="model" class="new-obj">
+
+		<div class="container new-obj--bc">
+			<div class="new-obj--blur js-back-pic"></div>
+			<div class="row">
+				<div class="poster col-md-4 js-poster"><img src="" alt="">
+				</div>
+				<div class="desc col-md-8 text-white ">
+					<h2></h2>
+					<div class="desc__txt">
+					</div>
+					<div class="desc__details">
+						<div class="row">
+							<div class="col-4 desc__details--item">COUNTRY</div>
+							<div class="col-8 desc__details--item js-country"></div>
+							<div class="col-4 desc__details--item">YEAR</div>
+							<div class="col-8 desc__details--item js-year"></div>
+							<div class="col-4 desc__details--item">GENRE</div>
+							<div class="col-8 desc__details--item js-genre"></div>
+							<div class="col-4 desc__details--item">ACTORS</div>
+							<div class="col-8 desc__details--item js-actors">
+							</div>
+						</div>
+					</div>
+					<div class="control">
+						<div class="row">
+							<div class="col-3"><a href="" class="btn btn--red js-delete">Delete</a></div>
+							<div class="col-3"><a href="" class="btn btn--blue js-edit">Edit</a></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container white-back">
+			<div class="comment-line">
+				<a class="js-show-comments"><p class="comment">Comments: <span class="js-comment-counter icon-down-open"></span></p></a>
+			</div>
+			<div class="comment-container">
+			</div>
+			<form>
+				<textarea class="comment--place" name="comment" placeholder="Add your comment" id="" cols="10" rows="1"></textarea>
+				<div class="form-block__btn-wrap">
+					<a class="btn btn--blue text-white js-add-comment">Add</a>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Scripts load -->
+
+	<script src="js/jquery3.3.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="js/script.js"></script>
+
+	</body>
+</html>
+ 
