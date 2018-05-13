@@ -21,7 +21,7 @@ class Movie {
             this.genre = form.genre;
             this.poster = form.poster;
             this.actors = form.actors;
-            this.descript = form.desc;
+            this.descript = form.descript;
             this.comments = form.comments;
             this.attr = form.attr;
         }
@@ -49,22 +49,24 @@ class Movie {
             poster.find('.js-comment-counter').text(counterOfcomments);
         }
 
-        var btnEdit = poster.find('.js-edit');
-        $(btnEdit).on('click', this, this.edit);
 
-        var objDelete = $(poster).find('.js-delete');
-        var attr = this.attr;
-        objDelete.click(function ( ) {    /// НУЖНО ПЕРЕДАТЬ ОБЪЕКТ!!
-            event.preventDefault();
-            delete localStorage[ $(poster).attr('data-key') ];
-            $(poster).remove();
-        });
+        poster.find('.js-edit').on('click', this, this.edit);
+
+        poster.find('.js-delete').on( 'click', this, this.deleteMovie );
 
         poster.find('.js-add-comment').on('click', this, additionComment);
         poster.find('.js-show-comments').on('click', commentShow);
 
 
-        return poster
+        return poster.attr('data-key', this.attr);
+    }
+
+    deleteMovie( event ){
+        event.preventDefault();
+        var objAttr = event.data.attr;
+        localStorage.removeItem( objAttr );
+        delete event.data;
+        $(this).closest('.new-obj').remove();
     }
 
     edit(event) {
@@ -88,28 +90,50 @@ class Movie {
         }
         $("html, body").animate({scrollTop: 0}, 400);
 
-        $('.js-add-movie').on('click', currentObj, realObj.makeEditing);
+        $('.js-add-movie').on('click', realObj, realObj.makeEditing);
+
 
     }
 
     makeEditing(event) {
-        var myObj = event.data;
+        var currentObj = event.data;
+        var attrValue = "[data-key = '" + currentObj.attr + "']";
+        var myObj = $('.content').find(attrValue);
         var formCorrected = this.closest('#movie');
+
+        currentObj.title = $(formCorrected).find("input[name='title']").val();
         $(myObj).find('h2').text($(formCorrected).find("input[name='title']").val());
+
+        currentObj.descript = $(formCorrected).find("textarea[name='desc']").val();
         $(myObj).find('.desc__txt').text($(formCorrected).find("textarea[name='desc']").val());
+
+        currentObj.country = $(formCorrected).find("input[name='country']").val();
         $(myObj).find('.js-country').text($(formCorrected).find("input[name='country']").val());
+
+        currentObj.genre = $(formCorrected).find("input[name='genre']").val();
         $(myObj).find('.js-genre').text($(formCorrected).find("input[name='genre']").val());
+
+        currentObj.poster = $(formCorrected).find("input[name='poster']").val();
         $(myObj).find('.js-poster > img').attr('src', $(formCorrected).find("input[name='poster']").val());
+
+        currentObj.actors = $(formCorrected).find("input[name='actors']").val();
         $(myObj).find('.js-actors').text($(formCorrected).find("input[name='actors']").val());
+
+        currentObj.year = $(formCorrected).find("input[name='year']").val();
         $(myObj).find('.js-year').text($(formCorrected).find("input[name='year']").val());
+
         $(myObj).find('.js-back-pic').css('background-image', "URL(" + $(formCorrected).find("input[name='poster']").val() + ")");
         formCorrected.reset();
         toggleForm();
         $('.js-add-movie').off('click');
         $('.js-add-movie').on('click', movieAddition);
-
+        localStorage.removeItem( currentObj.attr ) ;
+        setInLocalStorage( currentObj );
     }
 
+    fillingOutOfObject(){
+
+    }
 }
 
 function movieAddition() {
@@ -128,15 +152,18 @@ function movieAddition() {
     form.reset();
     toggleForm();
 
-
-    var serialObj = JSON.stringify(movie);
-
     var main = $('.content');
     var attrName = 'myKey' + localStorage.length;
     movie.attr = attrName;
-    main.append(movie.create().attr('data-key', attrName));
+    var serialObj = JSON.stringify(movie);
+    main.append(movie.create());
     localStorage.setItem("myKey" + localStorage.length, serialObj);
 
+}
+
+function setInLocalStorage( obj ) {
+    var serialObj = JSON.stringify( obj );
+    localStorage.setItem( obj.attr , serialObj);
 }
 
 function getObjectsFromLocalStorage() {
