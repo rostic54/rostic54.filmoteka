@@ -962,10 +962,12 @@ img {
   .desc__details--item {
     margin-bottom: 5px; }
 
-.comment--place {
-  padding: 20px;
-  margin-bottom: 20px;
-  height: auto; }
+.comment {
+  color: #f17a6e; }
+  .comment--place {
+    padding: 20px;
+    margin-bottom: 20px;
+    height: auto; }
 
 .comment-container {
   display: none; }

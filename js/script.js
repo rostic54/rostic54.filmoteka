@@ -2,14 +2,29 @@
 
 class Movie {
 
-    constructor(title, year, country, genre, poster, actors, descript, id) {
-        this.title = title;
-        this.year = year;
-        this.country = country;
-        this.genre = genre;
-        this.poster = poster;
-        this.actors = actors;
-        this.descript = descript;
+    constructor(form) {
+
+        if ($(form).attr('id')) {
+            this.title = $(form).find("input[name='title']").val();
+            this.year = $(form).find("input[name='year']").val();
+            this.country = $(form).find("input[name='country']").val();
+            this.genre = $(form).find("input[name='genre']").val();
+            this.poster = $(form).find("input[name='poster']").val();
+            this.actors = $(form).find("input[name='actors']").val();
+            this.descript = $(form).find("textarea[name='desc']").val();
+            this.comments = {};
+            this.attr = '';
+        } else {
+            this.title = form.title;
+            this.year = form.year;
+            this.country = form.country;
+            this.genre = form.genre;
+            this.poster = form.poster;
+            this.actors = form.actors;
+            this.descript = form.descript;
+            this.comments = form.comments;
+            this.attr = form.attr;
+        }
     }
 
     create() {
@@ -24,23 +39,34 @@ class Movie {
         poster.find('.js-actors').text(this.actors);
         poster.find('.js-poster > img').attr('src', this.poster);
         poster.find('.js-back-pic').css('background-image', "URL(" + this.poster + ")");
-        var btnEdit = poster.find('.js-edit');
 
-        $(btnEdit).on('click', this, this.edit );
+        var counterOfcomments = 0;
+        for (var key in this.comments) {
+            poster.find('.comment-container').append(this.comments[key]);
+            counterOfcomments++;
+        }
+        if( counterOfcomments) {
+            poster.find('.js-comment-counter').text(counterOfcomments);
+        }
 
-        var objDel = $(poster).find('.js-delete');
-        objDel.click( function () {
-            event.preventDefault();
-            $(poster).remove();
-        });
 
-        poster.find('.js-add-comment').on('click', additionComment);
+        poster.find('.js-edit').on('click', this, this.edit);
+
+        poster.find('.js-delete').on( 'click', this, this.deleteMovie );
+
+        poster.find('.js-add-comment').on('click', this, additionComment);
         poster.find('.js-show-comments').on('click', commentShow);
 
 
+        return poster.attr('data-key', this.attr);
+    }
 
-
-        return poster
+    deleteMovie( event ){
+        event.preventDefault();
+        var objAttr = event.data.attr;
+        localStorage.removeItem( objAttr );
+        delete event.data;
+        $(this).closest('.new-obj').remove();
     }
 
     edit(event) {
@@ -59,33 +85,55 @@ class Movie {
 
         $('.js-add-movie').off('click');
 
-        if( editForm.is(':hidden') ) {
-            formOpenClose();
+        if (editForm.is(':hidden')) {
+            toggleForm();
         }
         $("html, body").animate({scrollTop: 0}, 400);
 
-        $('.js-add-movie').on('click', currentObj, realObj.changeEditing);
+        $('.js-add-movie').on('click', realObj, realObj.makeEditing);
+
 
     }
 
-    changeEditing(event) {
-        var myObj = event.data;
+    makeEditing(event) {
+        var currentObj = event.data;
+        var attrValue = "[data-key = '" + currentObj.attr + "']";
+        var myObj = $('.content').find(attrValue);
         var formCorrected = this.closest('#movie');
+
+        currentObj.title = $(formCorrected).find("input[name='title']").val();
         $(myObj).find('h2').text($(formCorrected).find("input[name='title']").val());
+
+        currentObj.descript = $(formCorrected).find("textarea[name='desc']").val();
         $(myObj).find('.desc__txt').text($(formCorrected).find("textarea[name='desc']").val());
+
+        currentObj.country = $(formCorrected).find("input[name='country']").val();
         $(myObj).find('.js-country').text($(formCorrected).find("input[name='country']").val());
+
+        currentObj.genre = $(formCorrected).find("input[name='genre']").val();
         $(myObj).find('.js-genre').text($(formCorrected).find("input[name='genre']").val());
+
+        currentObj.poster = $(formCorrected).find("input[name='poster']").val();
         $(myObj).find('.js-poster > img').attr('src', $(formCorrected).find("input[name='poster']").val());
+
+        currentObj.actors = $(formCorrected).find("input[name='actors']").val();
         $(myObj).find('.js-actors').text($(formCorrected).find("input[name='actors']").val());
+
+        currentObj.year = $(formCorrected).find("input[name='year']").val();
         $(myObj).find('.js-year').text($(formCorrected).find("input[name='year']").val());
+
         $(myObj).find('.js-back-pic').css('background-image', "URL(" + $(formCorrected).find("input[name='poster']").val() + ")");
         formCorrected.reset();
-        formOpenClose();
+        toggleForm();
         $('.js-add-movie').off('click');
         $('.js-add-movie').on('click', movieAddition);
-
+        localStorage.removeItem( currentObj.attr ) ;
+        setInLocalStorage( currentObj );
     }
 
+    fillingOutOfObject(){
+
+    }
 }
 
 function movieAddition() {
@@ -99,44 +147,62 @@ function movieAddition() {
     }
 
     $(form).find('.js-error').css('display', 'none');
-    var movie = new Movie(form[0].value, form[1].value, form[2].value, form[3].value, form[4].value, form[5].value, form[6].value);
+    var movie = new Movie(form);
 
     form.reset();
-    formOpenClose();
-
-    // It's attempt to use localStorage
-   /* var serialObj = JSON.stringify( movie );
-    movie.counter = localStorage.length;
-    localStorage.setItem("myKey" + localStorage.length, serialObj);*/
+    toggleForm();
 
     var main = $('.content');
+    var attrName = 'myKey' + localStorage.length;
+    movie.attr = attrName;
+    var serialObj = JSON.stringify(movie);
     main.append(movie.create());
+    localStorage.setItem("myKey" + localStorage.length, serialObj);
 
+}
+
+function setInLocalStorage( obj ) {
+    var serialObj = JSON.stringify( obj );
+    localStorage.setItem( obj.attr , serialObj);
+}
+
+function getObjectsFromLocalStorage() {
+
+    if (localStorage.getItem("myKey" + ( localStorage.length - 1)) !== null) {
+        var counter = localStorage.length - 1;
+        while (localStorage.getItem("myKey" + counter)) {
+            var main = $('.content');
+            var returnObj = JSON.parse(localStorage.getItem("myKey" + counter));
+            var movie = new Movie(returnObj);
+            main.append(movie.create());
+            counter--;
+        }
+    }
 }
 
 function commentShow() {
     event.preventDefault();
     var commentContainer = $(this).parent().next();
-    if( commentContainer.find('p').length ) {
-        //commentContainer.toggle('slow');
-        if( $(commentContainer).is(':visible') ) {
-            commentClose( commentContainer );
-        }else{
-            commentOpen( commentContainer );
+    if (commentContainer.find('p').length) {
+
+        if ($(commentContainer).is(':visible')) {
+            commentClose(commentContainer);
+        } else {
+            commentOpen(commentContainer);
         }
     }
 }
-function commentOpen( commentContainer ) {
+function commentOpen(commentContainer) {
     $(commentContainer).css('display', 'block');
     $(commentContainer).prev().addClass('comment-opened');
 }
 
-function commentClose( commentContainer ) {
+function commentClose(commentContainer) {
     $(commentContainer).css('display', 'none');
     $(commentContainer).prev().removeClass('comment-opened');
 }
 
-function formOpenClose() {
+function toggleForm() {
 
     $('.edit').toggle('slow');
 }
@@ -145,29 +211,48 @@ function clearOfForm() {
     var form = this.closest('#movie');
     form.reset();
 }
-function additionComment(){
-    event.preventDefault();
-    var form =  $(this).closest('form');
-    var comment = form.find('textarea').val();
-    var commentContainer = form.siblings( '.comment-container' );
 
-    commentContainer.append("<p class = 'comment-line'>" +  comment + "</p>");
-    commentOpen( commentContainer );
-    var commentsCounter = $( commentContainer ).find('p');
-    form.siblings('.comment-line').find('.js-comment-counter').empty().append( ' ' + commentsCounter.length + ' ' );
+
+function additionComment(event) {
+    event.preventDefault();
+    var form = $(this).closest('form');
+
+    var comment = form.find('textarea').val(); // get text of new comment
+    if (comment.length && !(comment.trim() === '' ) ) {
+        var commentContainer = form.siblings('.comment-container');
+
+
+        addCommentInLocalStorage(event.data, ("<p class = 'comment-line'>" + comment + "</p>")); // it adds new comment in
+        commentContainer.append("<p class = 'comment-line'>" + comment + "</p>");
+
+        commentOpen(commentContainer);
+        var commentsCounter = $(commentContainer).find('p');
+        form.siblings('.comment-line').find('.js-comment-counter').empty().append(' ' + commentsCounter.length + ' ');
+        form[0].reset();
+    }
     form[0].reset();
 }
 
+function addCommentInLocalStorage(obj, commentTxt) {
+    var objOfComment = obj.comments;
+    var countObjElem = 0;
+    for (var key in objOfComment) {
+        countObjElem++;
+    }
+    objOfComment[countObjElem] = commentTxt;
+    localStorage.setItem(obj.attr, JSON.stringify(obj));
+}
+
 function listeners() {
-    $('.js-form-open').on('click', formOpenClose);
+    $('.js-form-open').on('click', toggleForm);
     $('.js-add-movie').on('click', movieAddition);
     $('.js-cancel').on('click', clearOfForm);
-
 }
 
 
 $(document).ready(function () {
 
     listeners();
+    getObjectsFromLocalStorage();
 
 });
